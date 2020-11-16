@@ -12,12 +12,16 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import seaborn as sb
 
-np.random.seed(1)
 from sklearn.metrics import mean_squared_error as MSE
 
-def LOOCV(exog, endog, model):           # "exog" is called 'exogeneous' and is the dataset wih only Independent Variable;
-                                         # "endog" is called endogeneous and represent the Class/Target variable
-                                         # "model" here represent the estimator used to fit training dataset.
+def LOOCV(exog, endog, model):
+    """
+    exog: is called 'exogeneous' and is the dataset wih only Independent Variable (e.g. X_train);
+    endog: is called endogeneous and represent the Class/Target variable (e.g. y_train)
+    model: here represent the estimator used to fit training dataset.
+
+    """
+    
     all_indices = list(exog.index)
     test_err = []
     for indx in all_indices:
@@ -41,12 +45,13 @@ def LOOCV(exog, endog, model):           # "exog" is called 'exogeneous' and is 
         
         
     return np.mean(test_err)
-    
 
-
+np.random.seed(1)
 Estimated_test_error_per_model = []
 X = np.random.normal(loc = 0, scale = 1.0, size = 100)
 Y = np.random.normal(loc = 0, scale = 1.0, size = 100)
+Y = X-2*X**2+Y
+
 df1 = pd.DataFrame({'X': X, 'Y': Y})
 x = df1[['X']]
 y = df1['Y']
@@ -119,7 +124,7 @@ print("MSE for model 7: ", mse)
 Estimated_test_error_per_model.append(mse)
 
 plt.figure(figsize= (8, 6))
-sb.set_style("darkgrid")
+sb.set_style('darkgrid')
 plt.xlabel("Degree Of Polynomial")
 plt.ylabel("Mean Squared Error")
 plt.scatter(x = np.arange(0, 7), y = Estimated_test_error_per_model, marker = "o")
